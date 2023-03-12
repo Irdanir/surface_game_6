@@ -9,6 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/splash"
     tools:context="ru.pavlenty.surfacegame2.MainActivity">
+
     <ImageButton
         android:id="@+id/buttonPlay"
         android:background="@drawable/playnow"
@@ -24,4 +25,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/soundinput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:hint="Enter volume (0 to 1), current is 0.5."
+        android:inputType="numberDecimal"
+        android:background="#F2F2F2"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="500dp" />
+
+
+
 </RelativeLayout>
+

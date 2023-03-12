@@ -6,31 +6,31 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 public class Player {
-    private Bitmap bitmap;
-    private int x;
-    private int y;
+    private static Bitmap bitmap;
+    private static int x;
+    private static int y;
     private int speed = 0;
     private boolean boosting;
     private final int GRAVITY = -10;
-    private int maxY;
-    private int minY;
+    private int maxX;
+    private int minX;
 
     private final int MIN_SPEED = 1;
     private final int MAX_SPEED = 20;
 
-    private Rect detectCollision;
+    public static Rect detectCollisiona;
 
     public Player(Context context, int screenX, int screenY) {
-        x = 75;
+        x = 100;
         y = 50;
         speed = 1;
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
-        maxY = screenY - bitmap.getHeight();
-        minY = 0;
+        maxX = screenX - bitmap.getWidth();
+        minX = 0;
         boosting = false;
 
 
-        detectCollision =  new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        detectCollisiona =  new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public void setBoosting() {
@@ -56,37 +56,37 @@ public class Player {
             speed = MIN_SPEED;
         }
 
-        y -= speed + GRAVITY;
+        x -= speed + GRAVITY;
 
-        if (y < minY) {
-            y = minY;
+        if (x < minX) {
+            x = minX;
         }
-        if (y > maxY) {
-            y = maxY;
+        if (x > maxX) {
+            x = maxX;
         }
 
 
-        detectCollision.left = x;
-        detectCollision.top = y;
-        detectCollision.right = x + bitmap.getWidth();
-        detectCollision.bottom = y + bitmap.getHeight();
+        detectCollisiona.left = x;
+        detectCollisiona.top = y;
+        detectCollisiona.right = x + bitmap.getWidth();
+        detectCollisiona.bottom = y + bitmap.getHeight();
 
     }
 
 
-    public Rect getDetectCollision() {
-        return detectCollision;
+    public static Rect getDetectCollisiona() {
+        return detectCollisiona;
     }
 
-    public Bitmap getBitmap() {
+    public static Bitmap getBitmap() {
         return bitmap;
     }
 
-    public int getX() {
+    public static int getX() {
         return x;
     }
 
-    public int getY() {
+    public static int getY() {
         return y;
     }
 

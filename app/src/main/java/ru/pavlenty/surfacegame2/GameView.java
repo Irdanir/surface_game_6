@@ -25,28 +25,14 @@ public class GameView extends SurfaceView implements Runnable {
     private Paint paint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
-
     private ArrayList<Star> stars = new ArrayList<Star>();
-
     int screenX;
-    int countMisses;
-
-    boolean flag ;
-
-
     private boolean isGameOver;
-
-
-    static int score;
-
-
-    int highScore[] = new int[4];
 
 
     SharedPreferences sharedPreferences;
     boolean finover = false;
     static MediaPlayer gameOnsound;
-    final MediaPlayer killedEnemysound;
     final MediaPlayer gameOversound;
 
     Context context;
@@ -67,23 +53,12 @@ public class GameView extends SurfaceView implements Runnable {
         }
 
         this.screenX = screenX;
-        countMisses = 0;
         isGameOver = false;
-
-
-        score = 0;
         sharedPreferences = context.getSharedPreferences("SHAR_PREF_NAME", Context.MODE_PRIVATE);
-
-
-        highScore[0] = sharedPreferences.getInt("score1", 0);
-        highScore[1] = sharedPreferences.getInt("score2", 0);
-        highScore[2] = sharedPreferences.getInt("score3", 0);
-        highScore[3] = sharedPreferences.getInt("score4", 0);
         this.context = context;
 
 
         gameOnsound = MediaPlayer.create(context, R.raw.gameon);
-        killedEnemysound = MediaPlayer.create(context, R.raw.killedenemy);
         gameOversound = MediaPlayer.create(context, R.raw.gameover);
 
         gameOnsound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -162,7 +137,6 @@ public class GameView extends SurfaceView implements Runnable {
                 canvas.drawPoint(s.getX(), s.getY(), paint);
             }
             paint.setTextSize(50);
-            canvas.drawText("Время выживания: "+score,100,50,paint);
             canvas.drawText("ХП противника: " + (n-counter),100,150,paint);
             canvas.drawText("Стрельба",100,1600,paint);
             canvas.drawText("Движение", 800, 1600, paint);
@@ -229,7 +203,6 @@ public class GameView extends SurfaceView implements Runnable {
         gameOnsound.stop();
     }
     private void update() {
-        score++;
         Rect qwerty = player.getDetectCollisiona();
         player.update();
         obstacle.update();
@@ -267,20 +240,4 @@ public class GameView extends SurfaceView implements Runnable {
             e.printStackTrace();
         }
     }
-
-    public void pause() {
-        playing = false;
-        try {
-            gameThread.join();
-        } catch (InterruptedException e) {
-        }
-    }
-
-    public void resume() {
-        playing = true;
-        gameThread = new Thread(this);
-        gameThread.start();
-    }
-
-
 }

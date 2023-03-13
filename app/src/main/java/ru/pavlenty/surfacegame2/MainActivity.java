@@ -32,7 +32,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton buttonPlay;
-    private ImageButton buttonScore;
     public static float volume = 0.5f;
     private MediaPlayer mediaPlayer;
     private EditText soundInput;
@@ -44,9 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         buttonPlay = findViewById(R.id.buttonPlay);
-        buttonScore = findViewById(R.id.buttonScore);
         buttonPlay.setOnClickListener(this);
-        buttonScore.setOnClickListener(this);
 
         soundInput = findViewById(R.id.soundinput);
         soundInput.addTextChangedListener(new TextWatcher() {
@@ -88,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             mediaPlayer.stop();
             startActivity(new Intent(MainActivity.this, GameActivity.class));
-        } else if (v == buttonScore) {
-            startActivity(new Intent(MainActivity.this, HightScore.class));
         }
     }
     @Override

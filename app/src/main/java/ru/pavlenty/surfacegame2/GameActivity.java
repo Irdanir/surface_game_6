@@ -24,21 +24,6 @@ public class GameActivity extends AppCompatActivity {
 
         setContentView(gameView);
     }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        gameView.pause();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        gameView.resume();
-    }
-
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

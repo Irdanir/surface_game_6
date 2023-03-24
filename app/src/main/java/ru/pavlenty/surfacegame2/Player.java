@@ -9,14 +9,12 @@ public class Player {
     private static Bitmap bitmap;
     private static int x;
     private static int y;
-    private int speed = 0;
+    private int speed;
     private boolean boosting;
     private final int GRAVITY = -10;
     private int maxX;
     private int minX;
-
     private final int MIN_SPEED = 1;
-    private final int MAX_SPEED = 20;
 
     public static Rect detectCollisiona;
 
@@ -28,8 +26,6 @@ public class Player {
         maxX = screenX - bitmap.getWidth();
         minX = 0;
         boosting = false;
-
-
         detectCollisiona =  new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
@@ -47,49 +43,30 @@ public class Player {
         } else {
             speed -= 5;
         }
-
-        if (speed > MAX_SPEED) {
-            speed = MAX_SPEED;
-        }
-
         if (speed < MIN_SPEED) {
             speed = MIN_SPEED;
         }
-
         x -= speed + GRAVITY;
-
         if (x < minX) {
             x = minX;
         }
         if (x > maxX) {
             x = maxX;
         }
-
-
         detectCollisiona.left = x;
         detectCollisiona.top = y;
         detectCollisiona.right = x + bitmap.getWidth();
         detectCollisiona.bottom = y + bitmap.getHeight();
-
     }
-
-
-    public static Rect getDetectCollisiona() {
-        return detectCollisiona;
-    }
-
     public static Bitmap getBitmap() {
         return bitmap;
     }
-
     public static int getX() {
         return x;
     }
-
     public static int getY() {
         return y;
     }
-
     public int getSpeed() {
         return speed;
     }

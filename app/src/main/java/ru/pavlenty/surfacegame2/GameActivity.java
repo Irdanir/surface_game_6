@@ -8,21 +8,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class GameActivity extends AppCompatActivity {
-
-
     private GameView gameView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         Point size = new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
         gameView = new GameView(this,size.x,size.y);
-
-
         setContentView(gameView);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gameView.pause();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gameView.resume();
     }
     @Override
     public void onBackPressed() {
@@ -31,13 +34,10 @@ public class GameActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         GameView.stopMusic();
-                        Intent startMain = new Intent(Intent.ACTION_MAIN);
-                        startMain.addCategory(Intent.CATEGORY_HOME);
-                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(startMain);
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
@@ -47,6 +47,5 @@ public class GameActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 }

@@ -6,52 +6,37 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Canvas;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.media.MediaPlayer;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.media.MediaPlayer;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton buttonPlay;
-    public static float volume = 0.5f;
+    private ImageButton buttonScore;
     private MediaPlayer mediaPlayer;
     private EditText soundInput;
-
+    public static float volume = 0.5f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        buttonPlay = findViewById(R.id.buttonPlay);
+        buttonPlay = (ImageButton) findViewById(R.id.buttonPlay);
+        buttonScore = (ImageButton) findViewById(R.id.buttonScore);
         buttonPlay.setOnClickListener(this);
-
+        buttonScore.setOnClickListener(this);
         soundInput = findViewById(R.id.soundinput);
         soundInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Do nothing
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
@@ -61,13 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 mediaPlayer.setVolume(volume, volume);
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 //Do nothing
             }
         });
-
         mediaPlayer = MediaPlayer.create(this, R.raw.background_music2);
         mediaPlayer.setVolume(volume, volume);
         mediaPlayer.setLooping(true);
@@ -84,23 +67,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 throw new RuntimeException(e);
             }
             mediaPlayer.stop();
-            startActivity(new Intent(MainActivity.this, GameActivity.class));
+            startActivity(new Intent(MenuActivity.this, GameActivity.class));
+        }
+
+        if (v == buttonScore) {
+            startActivity(new Intent(MenuActivity.this, HightScore.class));
         }
     }
+
     @Override
     public void onBackPressed() {
+        Log.d("MainActivity", "onBackPressed()");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Вы хотите выйти?")
                 .setCancelable(false)
                 .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         GameView.stopMusic();
-                        Intent startMain = new Intent(Intent.ACTION_MAIN);
-                        startMain.addCategory(Intent.CATEGORY_HOME);
-                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(startMain);
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
@@ -110,6 +96,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 }

@@ -12,13 +12,8 @@ public class Bullet {
     static int x;
     static int y;
     private int speed = 0;
-    private boolean boosting;
-    private final int GRAVITY = -10;
     private int maxY;
     private int minY;
-
-    private final int MIN_SPEED = 1;
-    private final int MAX_SPEED = 20;
 
     public static Rect detectCollisiona;
 
@@ -29,7 +24,6 @@ public class Bullet {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.friend);
         maxY = screenY - bitmap.getHeight();
         minY = 0;
-        boosting = false;
         detectCollisiona =  new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
     public void update() {

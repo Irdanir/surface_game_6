@@ -101,7 +101,7 @@ public class GameView extends SurfaceView implements Runnable {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP && x >= x1 && x <= x2 && y >= y1 && y <= y2) {
             if (!bulletspawn) {
                 //System.out.println("SPAWNING A BULLET");
-                bullet.x = player.getX();
+                bullet.x = player.getX() + 60;
                 bulletspawn = true;
                 shootingsound.start();
             } else {

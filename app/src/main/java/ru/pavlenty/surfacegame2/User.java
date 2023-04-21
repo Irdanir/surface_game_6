@@ -9,4 +9,8 @@ public class User {
     public long userId;
     public String username;
     public String password;
+
+    public long getId() {
+        return this.userId;
+    }
 }

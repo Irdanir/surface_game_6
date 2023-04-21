@@ -11,4 +11,10 @@ public interface UserDao {
     User getUser(String username, String password);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveUser(User user);
+
+    @Query("SELECT * FROM users WHERE username = :username AND password = :password")
+    User getUserByUsernameAndPassword(String username, String password);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertOrUpdateUser(User user);
 }

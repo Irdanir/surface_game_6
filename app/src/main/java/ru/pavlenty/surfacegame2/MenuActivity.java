@@ -61,17 +61,33 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == buttonPlay) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            if (LoginActivity.isLoggedIn) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                mediaPlayer.stop();
+                startActivity(new Intent(MenuActivity.this, GameActivity.class));
+            } else {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
+                mediaPlayer.stop();
+                startActivity(new Intent(MenuActivity.this, GameActivity.class));
             }
-            mediaPlayer.stop();
-            startActivity(new Intent(MenuActivity.this, GameActivity.class));
         }
 
         if (v == buttonScore) {
-            startActivity(new Intent(MenuActivity.this, HightScore.class));
+            if (LoginActivity.isLoggedIn == true) {
+                startActivity(new Intent(MenuActivity.this, HightScore.class));
+            } else {
+                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
+                startActivity(new Intent(MenuActivity.this, HightScore.class));
+            }
         }
     }
 

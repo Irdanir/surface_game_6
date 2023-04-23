@@ -16,6 +16,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordEditText;
     private Button mLoginButton;
     private UserDao mUserDao;
+    public static Boolean isLoggedIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
                 String username = mUsernameEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
                 User user = mUserDao.getUserByUsernameAndPassword(username, password);
+                isLoggedIn = true;
                 if (user != null) {
                     SharedPreferences.Editor editor = getSharedPreferences("my_prefs", MODE_PRIVATE).edit();
                     editor.putLong("user_id", user.getId());

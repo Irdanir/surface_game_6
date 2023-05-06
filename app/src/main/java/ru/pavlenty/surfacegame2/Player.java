@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.util.DisplayMetrics;
 
 public class Player {
     private static Bitmap bitmap;
@@ -14,6 +15,8 @@ public class Player {
     private final int GRAVITY = -10;
     private int maxX;
     private int minX;
+    private int screenWidthDp;
+    private int screenHeightDp;
     private final int MIN_SPEED = 1;
 
     public static Rect detectCollisiona;
@@ -26,33 +29,22 @@ public class Player {
         maxX = screenX - bitmap.getWidth();
         minX = 0;
         boosting = false;
+        Context mContext = context;
         detectCollisiona =  new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
+        screenWidthDp  = (int) (displayMetrics.widthPixels / displayMetrics.density);
+        screenHeightDp = (int) (displayMetrics.heightPixels / displayMetrics.density);
     }
 
-    public void setBoosting() {
-        boosting = true;
+    public void move_up() {
+        x += screenWidthDp / 3;
     }
 
-    public void stopBoosting() {
-        boosting = false;
+    public void move_down() {
+        x -= screenWidthDp / 3;
     }
 
     public void update() {
-        if (boosting) {
-            speed += 2;
-        } else {
-            speed -= 5;
-        }
-        if (speed < MIN_SPEED) {
-            speed = MIN_SPEED;
-        }
-        x -= speed + GRAVITY;
-        if (x < minX) {
-            x = minX;
-        }
-        if (x > maxX) {
-            x = maxX;
-        }
         detectCollisiona.left = x;
         detectCollisiona.top = y;
         detectCollisiona.right = x + bitmap.getWidth();

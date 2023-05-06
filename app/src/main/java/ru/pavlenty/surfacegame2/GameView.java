@@ -3,10 +3,12 @@ package ru.pavlenty.surfacegame2;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,7 +21,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Thread gameThread = null;
     private Player player;
     private Explosion Explosion;
-    private Enemy obstacle;
+    private Enemy enemy;
     private Bullet bullet;
     private Paint paint;
     private Canvas canvas;
@@ -28,7 +30,7 @@ public class GameView extends SurfaceView implements Runnable {
     private ArrayList<Star> stars = new ArrayList<Star>();
 
     int screenX;
-    int countMisses;
+    int rounds = 0;
 
     boolean flag ;
 
@@ -54,7 +56,7 @@ public class GameView extends SurfaceView implements Runnable {
         super(context);
         player = new Player(context, screenX, screenY);
         Explosion = new Explosion(context);
-        obstacle = new Enemy(context, screenX + 50, screenY - 50);
+        enemy = new Enemy(context, screenX + 50, screenY - 50);
         bullet = new Bullet(context, screenX + 50, screenY - 50);
         surfaceHolder = getHolder();
         paint = new Paint();
@@ -66,7 +68,6 @@ public class GameView extends SurfaceView implements Runnable {
         }
 
         this.screenX = screenX;
-        countMisses = 0;
         isGameOver = false;
 
 
@@ -94,10 +95,15 @@ public class GameView extends SurfaceView implements Runnable {
     boolean bulletspawn = false;
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
+        Context mContext = context;
+        DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
+        int screenWidthDp = (int) (displayMetrics.widthPixels / displayMetrics.density);
+        int screenHeightDp = (int) (displayMetrics.heightPixels / displayMetrics.density);
         int x = (int) motionEvent.getX();
         int y = (int) motionEvent.getY();
-        int x1 = 0; int x2 = 300; int y1 = 1500; int y2 = 1700;
-        int x3 = 700; int x4 = 1200; int y3 = 1500; int y4 = 1700;
+        int x1 = 0; int x2 = 300; int y1 = 1500; int y2 = 1600;
+        int x3 = 700; int x4 = 1200; int y3 = 1500; int y4 = 1600;
+        int x5 = 700; int x6 = 1200; int y5 = 1700; int y6 = 1800;
         if (motionEvent.getAction() == MotionEvent.ACTION_UP && x >= x1 && x <= x2 && y >= y1 && y <= y2) {
             if (!bulletspawn) {
                 //System.out.println("SPAWNING A BULLET");
@@ -111,15 +117,17 @@ public class GameView extends SurfaceView implements Runnable {
         }
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_UP:
-                player.stopBoosting();
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP && x >= x3 && x <= x4 && y >= y3 && y <= y4) {
+                    player.move_up();
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP && x >= x5 && x <= x6 && y >= y5 && y <= y6) {
+                    player.move_down();
+                }
                 break;
             case MotionEvent.ACTION_DOWN:
-                player.setBoosting();
                 break;
-
         }
-        if(finover){
-            if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+        if (finover){
+            if (motionEvent.getAction()==MotionEvent.ACTION_DOWN){
                 context.startActivity(new Intent(context, MenuActivity.class));
                 stopMusic();
             }
@@ -153,18 +161,29 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawText("Время выживания: "+score,100,50,paint);
             canvas.drawText("ХП противника: " + (health-hits),100,150,paint);
             canvas.drawText("Стрельба",100,1600,paint);
-            canvas.drawText("Движение", 800, 1600, paint);
+            canvas.drawText("Вверх", 800, 1600, paint);
+            canvas.drawText("Вниз", 800, 1800, paint);
             if (!isGameOver) {
                 canvas.drawBitmap(
                         player.getBitmap(),
                         player.getX(),
                         player.getY(),
                         paint);
-                canvas.drawBitmap(
-                        obstacle.getBitmap(),
-                        obstacle.getX(),
-                        obstacle.getY(),
-                        paint);
+                if (rounds % 5 != 0) {
+                    enemy.bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
+                    canvas.drawBitmap(
+                            enemy.getBitmap(),
+                            enemy.getX(),
+                            enemy.getY(),
+                            paint);
+                } else {
+                    enemy.bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
+                    canvas.drawBitmap(
+                            enemy.getBitmap(),
+                            enemy.getX(),
+                            enemy.getY(),
+                            paint);
+                }
                 if (bulletspawn) {
                     canvas.drawBitmap(
                             bullet.getBitmap(),
@@ -181,8 +200,8 @@ public class GameView extends SurfaceView implements Runnable {
                             paint);
                     canvas.drawBitmap(
                             Explosion.getBitmap(),
-                            obstacle.getX(),
-                            obstacle.getY(),
+                            enemy.getX(),
+                            enemy.getY(),
                             paint);
                 } else {
                     canvas.drawBitmap(
@@ -220,14 +239,19 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         if (hits >= health) {
             hits = 0;
-            obstacle.y = 1400;
+            enemy.y = 1400;
             counter++;
             health = 4 + counter;
+            if (rounds % 5 == 0) {
+                health *= 10;
+            } else {
+                health = 4 + counter;
+            }
             victorysound.start();
         }
         score++;
         player.update();
-        obstacle.update();
+        enemy.update();
         bullet.update();
         if (bulletspawn == false) {
             bullet.x = 0;
@@ -248,6 +272,7 @@ public class GameView extends SurfaceView implements Runnable {
             }
             isgamewon = true;
             bulletspawn = false;
+            rounds++;
         } else if (Enemy.getIsCollision_player()) {
             isgamewon = false;
         }

@@ -19,5 +19,4 @@
         <activity android:name=".HightScore" />
         <activity android:name=".LoginActivity"/>
     </application>
-
 </manifest>

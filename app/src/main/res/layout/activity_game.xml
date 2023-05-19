@@ -15,6 +15,5 @@
         android:background="@drawable/playnow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonScore"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

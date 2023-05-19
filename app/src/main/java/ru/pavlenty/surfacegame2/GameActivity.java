@@ -7,7 +7,7 @@ import android.graphics.Point;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class GameActivity extends AppCompatActivity {
+public class    GameActivity extends AppCompatActivity {
     private GameView gameView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

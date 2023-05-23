@@ -169,21 +169,12 @@ public class GameView extends SurfaceView implements Runnable {
                         player.getX(),
                         player.getY(),
                         paint);
-                if (rounds % 5 != 0) {
-                    enemy.bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
-                    canvas.drawBitmap(
-                            enemy.getBitmap(),
-                            enemy.getX(),
-                            enemy.getY(),
-                            paint);
-                } else {
-                    enemy.bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
-                    canvas.drawBitmap(
-                            enemy.getBitmap(),
-                            enemy.getX(),
-                            enemy.getY(),
-                            paint);
-                }
+                enemy.bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
+                canvas.drawBitmap(
+                        enemy.getBitmap(),
+                        enemy.getX(),
+                        enemy.getY(),
+                        paint);
                 if (bulletspawn) {
                     canvas.drawBitmap(
                             bullet.getBitmap(),
@@ -233,6 +224,7 @@ public class GameView extends SurfaceView implements Runnable {
     static int counter = 0;
     int health = 4;
     int hits = 0;
+    int damage = 1;
     public static void stopMusic(){
         gameOnsound.stop();
     }
@@ -244,6 +236,10 @@ public class GameView extends SurfaceView implements Runnable {
             health = 4 + counter;
             if (rounds % 5 == 0) {
                 health *= 10;
+                canvas.drawText("Босс", canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
+                if (health >= 20) {
+                    damage = health / 20;
+                }
             } else {
                 health = 4 + counter;
             }
@@ -262,17 +258,21 @@ public class GameView extends SurfaceView implements Runnable {
             bullet.y = player.getY();
             bulletspawn = false;
         }
+
         boolean isCollision = Enemy.getIsCollision_bullet();
-        hits += isCollision ? 1 : 0;
+        hits += isCollision ? damage : 0;
         isGameOver = (Enemy.getIsCollision_player() || Enemy.getY() < Player.getY());
         if (Enemy.getIsCollision_bullet() && !Enemy.getIsCollision_player()) {
             if (hits % 3 == 0) {
                 gameOversound.start();
-                hits++;
+                hits += damage;
             }
             isgamewon = true;
             bulletspawn = false;
             rounds++;
+            if (health >= 10) {
+                damage = health / 10;
+            }
         } else if (Enemy.getIsCollision_player()) {
             isgamewon = false;
         }

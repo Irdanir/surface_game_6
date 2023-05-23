@@ -7,9 +7,9 @@ import android.graphics.Rect;
 import java.util.Random;
 
 public class Enemy {
-    static Bitmap bitmap;
-    static int x;
-    static int y;
+    public static Bitmap bitmap;
+    public static int x;
+    public static int y;
     private int speed = 0;
     private int maxY;
     private int minY;

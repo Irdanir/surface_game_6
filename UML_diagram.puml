@@ -1,0 +1,181 @@
+@startuml
+class ru.pavlenty.surfacegame2.HighScore {
++ long userId
++ int score
+}
+class ru.pavlenty.surfacegame2.LoginActivity {
+- EditText mUsernameEditText
+- EditText mPasswordEditText
+- Button mLoginButton
+- UserDao mUserDao
++ {static} Boolean isLoggedIn
+# void onCreate(Bundle)
+}
+class ru.pavlenty.surfacegame2.Star {
+- int x
+- int y
+
+- int speed
+- int maxX
+- int maxY
+- int minX
+- int minY
++ void update(int)
++ float getStarWidth()
++ int getX()
++ int getY()
+}
+class ru.pavlenty.surfacegame2.GameView {
+~ boolean playing
+- Thread gameThread
+- Player player
+- Explosion Explosion
+- Enemy enemy
+- Bullet bullet
+- Paint paint
+- Canvas canvas
+- SurfaceHolder surfaceHolder
+- ArrayList<Star> stars
+~ int screenX
+~ int rounds
+~ boolean flag
+- boolean isGameOver
+~ {static} int score
+~ int[] highScore
+~ SharedPreferences sharedPreferences
+~ boolean finover
+~ {static} MediaPlayer gameOnsound
+~ MediaPlayer gameOversound
+~ {static} MediaPlayer hitsound
+~ {static} MediaPlayer shootingsound
+~ {static} MediaPlayer victorysound
+~ Context context
+~ boolean bulletspawn
+~ boolean isgamewon
+~ {static} int counter
+~ int health
+~ int hits
++ boolean onTouchEvent(MotionEvent)
++ void run()
++ void draw()
++ {static} void stopMusic()
+- void update()
+- void control()
++ void pause()
++ void resume()
+}
+class ru.pavlenty.surfacegame2.MenuActivity {
+- ImageButton buttonPlay
+- ImageButton buttonScore
+- MediaPlayer mediaPlayer
+- EditText soundInput
++ {static} float volume
+# void onCreate(Bundle)
++ void onClick(View)
++ void onBackPressed()
+}
+interface ru.pavlenty.surfacegame2.HighScoreDao {
+~ HighScore getHighScore(long)
+~ void saveHighScore(HighScore)
+}
+class ru.pavlenty.surfacegame2.Enemy {
++ {static} Bitmap bitmap
++ {static} int x
++ {static} int y
+- int speed
+- int maxY
+- int minY
++ {static} Rect detectCollision
+~ boolean movingup
++ void update()
++ {static} Bitmap getBitmap()
++ {static} int getX()
++ {static} boolean getIsCollision_player()
++ {static} boolean getIsCollision_bullet()
++ {static} int getY()
+}
+class ru.pavlenty.surfacegame2.GameActivity {
+- GameView gameView
+# void onCreate(Bundle)
+# void onPause()
+# void onResume()
++ void onBackPressed()
+}
+class ru.pavlenty.surfacegame2.Explosion {
+- {static} Bitmap bitmap
++ {static} Bitmap getBitmap()
+}
+class ru.pavlenty.surfacegame2.Bullet {
+- {static} Bitmap bitmap
+~ {static} int x
+~ {static} int y
+- int speed
+- int maxY
+- int minY
++ {static} Rect detectCollisiona
++ void update()
++ {static} Rect getDetectCollisiona()
++ {static} Bitmap getBitmap()
++ {static} int getX()
++ {static} int getY()
++ int getSpeed()
+}
+class ru.pavlenty.surfacegame2.Player {
+- {static} Bitmap bitmap
+- {static} int x
+- {static} int y
+- int speed
+- boolean boosting
+- int GRAVITY
+- int maxX
+- int minX
+- int screenWidthDp
+- int screenHeightDp
+- int MIN_SPEED
++ {static} Rect detectCollisiona
++ void move_up()
++ void move_down()
++ void update()
++ {static} Bitmap getBitmap()
++ {static} int getX()
++ {static} int getY()
++ int getSpeed()
+}
+class ru.pavlenty.surfacegame2.User {
++ long userId
++ String username
++ String password
++ long getId()
+}
+class ru.pavlenty.surfacegame2.HightScore {
+- TextView textView
+- SharedPreferences sharedPreferences
+- {static} String SHARE_PREF_NAME
+- {static} int DEFAULT_SCORE
+# void onCreate(Bundle)
+- int getHighScore(int)
+}
+interface ru.pavlenty.surfacegame2.UserDao {
+~ User getUser(String,String)
+~ void saveUser(User)
+~ User getUserByUsernameAndPassword(String,String)
+~ void insertOrUpdateUser(User)
+}
+abstract class ru.pavlenty.surfacegame2.MyDatabase {
+- {static} String DB_NAME
+- {static} MyDatabase instance
++ {static} MyDatabase getInstance(Context)
++ {abstract}UserDao userDao()
++ {abstract}HighScoreDao highScoreDao()
+}
+
+
+androidx.appcompat.app.AppCompatActivity <|-- ru.pavlenty.surfacegame2.LoginActivity
+ru.pavlenty.surfacegame2.Runnable <|.. ru.pavlenty.surfacegame2.GameView
+android.view.SurfaceView <|-- ru.pavlenty.surfacegame2.GameView
+ru.pavlenty.surfacegame2.OnClickListener <|.. ru.pavlenty.surfacegame2.MenuActivity
+androidx.appcompat.app.AppCompatActivity <|-- ru.pavlenty.surfacegame2.MenuActivity
+androidx.appcompat.app.AppCompatActivity <|-- ru.pavlenty.surfacegame2.GameActivity
+androidx.appcompat.app.AppCompatActivity <|-- ru.pavlenty.surfacegame2.HightScore
+androidx.room.RoomDatabase <|-- ru.pavlenty.surfacegame2.MyDatabase
+@enduml
